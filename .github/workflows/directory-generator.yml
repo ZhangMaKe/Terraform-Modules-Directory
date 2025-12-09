@@ -48,7 +48,7 @@ jobs:
                   DIRECTORY_ROWS+=$(printf "| **%s** | %s | [Link](%s) |\n" "$name" "$desc" "$url")
                 done <<< "$ROWS_TSV"
 
-                printf "%s\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
+                printf "%b\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
                 echo "Successfully wrote directory to $OUTPUT_FILE"
 
             - name: 📤 Commit and Push Changes
