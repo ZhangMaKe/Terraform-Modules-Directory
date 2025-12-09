@@ -1,0 +1,51 @@
+name: TF Module Directory Generator
+
+on:
+    schedule:
+        - cron: '0 4 * * *'
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    generate-directory:
+        runs-on: ubuntu-latest
+        steps:
+            - name: ⬇️ Checkout Repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: 🚀 Generate Module Directory
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                echo "Generating Module Directory..."
+                OUTPUT_FILE="MODULES_DIRECTORY.md"
+                REPO_PREFIX="tf-module-"
+
+                echo "Fetching respository data from GitHub API..."
+                REPOS=$(gh repo list ZhangMaKe --json name,description,url --limit 1000 --no-archived)
+
+                echo "Generating markdown content..."
+                DIRECTORY_CONTENT="## Terraform Module Directory\n\n"
+                DIRECTORY_CONTENT+="This directory contains information about Terraform Module repositories provided by ZhangMaKe, and is auto-updated every 24 hours.\n\n"
+                DIRECTORY_CONTENT+="| Module Name | Description | Link |\n"
+                DIRECTORY_CONTENT+="| :--- | :--- | :--- |\n"
+
+                DIRECTORY_CONTENT+=$(echo "$REPOS" | jq -r --arg PREFIX "$REPO_PREFIX" '
+                  .[] |
+                  select(.name | startswith($prefix)) |
+                  "| **\(.name)** | \(.description | select(. != null and . != "") // "No Description Provided.") | [Link](\(.url)) |"
+                  ')
+
+                echo -e "$DIRECTORY_CONTENT" > $OUTPUT_FILE
+                echo "Successfully wrote directory to $OUTPUT_FILE"
+
+            - name: 📤 Commit and Push Changes
+              uses: stefanzweifel/git-auto-commit-action@v7
+              with:
+                commit_message: "chore(ci): Auto-Update Directory"
+                file_pattern: "MODULES_DIRECTORY.md"
+                branch: "main"
