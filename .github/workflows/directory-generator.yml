@@ -24,6 +24,7 @@ jobs:
                 echo "Generating Module Directory..."
                 OUTPUT_FILE="MODULES_DIRECTORY.md"
                 REPO_PREFIX="tf-module-"
+                export REPO_PREFIX
 
                 echo "Fetching respository data from GitHub API..."
                 REPOS=$(gh repo list ZhangMaKe --json name,description,url --limit 1000 --no-archived)
@@ -34,9 +35,11 @@ jobs:
                 DIRECTORY_HEADER+="| Module Name | Description | Link |\n"
                 DIRECTORY_HEADER+="| :--- | :--- | :--- |\n"
 
-                # Use a simpler jq expression and a safe fallback for description
-                DIRECTORY_ROWS=$(echo "$REPOS" | jq -r --arg prefix "$REPO_PREFIX" '.[]
-                  | select(.name | startswith($prefix))
+                echo "REPO_PREFIX=<${REPO_PREFIX}>"
+                echo "REPOS sample: $(echo "$REPOS" | head -c 500)"
+
+                DIRECTORY_ROWS=$(echo "$REPOS" | jq -r '.[]
+                  | select(.name | startswith(env.REPO_PREFIX))
                   | "| **\(.name)** | \(.description // \"No Description Provided.\") | [Link](\(.url)) |"')
 
                 printf "%s\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
