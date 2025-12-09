@@ -34,7 +34,7 @@ jobs:
                 DIRECTORY_CONTENT+="| Module Name | Description | Link |\n"
                 DIRECTORY_CONTENT+="| :--- | :--- | :--- |\n"
 
-                DIRECTORY_CONTENT+=$(echo "$REPOS" | jq -r --arg PREFIX "$REPO_PREFIX" '
+                DIRECTORY_CONTENT+=$(echo "$REPOS" | jq -r --arg prefix "$REPO_PREFIX" '
                   .[] |
                   select(.name | startswith($prefix)) |
                   "| **\(.name)** | \(.description | select(. != null and . != "") // "No Description Provided.") | [Link](\(.url)) |"
