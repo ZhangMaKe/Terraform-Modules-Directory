@@ -34,13 +34,12 @@ jobs:
                 DIRECTORY_HEADER+="| Module Name | Description | Link |\n"
                 DIRECTORY_HEADER+="| :--- | :--- | :--- |\n"
 
-                DIRECTORY_ROWS=$(echo "$REPOS" | jq -r --arg prefix "$REPO_PREFIX" '
-                  .[] |
-                  select(.name | startswith($prefix)) |
-                  "| **\(.name)** | \(.description | select(. != null and . != "") // "No Description Provided.") | [Link](\(.url)) |"
-                  ')
+                # Use a simpler jq expression and a safe fallback for description
+                DIRECTORY_ROWS=$(echo "$REPOS" | jq -r --arg prefix "$REPO_PREFIX" '.[]
+                  | select(.name | startswith($prefix))
+                  | "| **\(.name)** | \(.description // \"No Description Provided.\") | [Link](\(.url)) |"')
 
-                echo -e "$DIRECTORY_HEADER$DIRECTORY_ROWS" > $OUTPUT_FILE
+                printf "%s\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
                 echo "Successfully wrote directory to $OUTPUT_FILE"
 
             - name: 📤 Commit and Push Changes
