@@ -38,9 +38,15 @@ jobs:
                 echo "REPO_PREFIX=<${REPO_PREFIX}>"
                 echo "REPOS sample: $(echo "$REPOS" | head -c 500)"
 
-                DIRECTORY_ROWS=$(echo "$REPOS" | jq -r '.[]
+                ROWS_TSV=$(echo "$REPOS" | jq -r '.[]
                   | select(.name | startswith(env.REPO_PREFIX))
-                  | "| **\(.name)** | \(.description // \"No Description Provided.\") | [Link](\(.url)) |"')
+                  | [ .name, ( .description // "No Description Provided." ), .url ]
+                  | @tsv')
+
+                DIRECTORY_ROWS=""
+                while IFS=$'\t' read -r name desc url; do
+                  DIRECTORY_ROWS+=$(printf "| **%s** | %s | [Link](%s) |\n" "$name" "$desc" "$url")
+                done <<< "$ROWS_TSV"
 
                 printf "%s\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
                 echo "Successfully wrote directory to $OUTPUT_FILE"
