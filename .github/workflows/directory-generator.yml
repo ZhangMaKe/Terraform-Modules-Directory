@@ -45,7 +45,7 @@ jobs:
 
                 DIRECTORY_ROWS=""
                 while IFS=$'\t' read -r name desc url; do
-                  DIRECTORY_ROWS+=$(printf "| **%s** | %s | [Link](%s) |\n" "$name" "$desc" "$url")
+                  DIRECTORY_ROWS+="| **${name}** | ${desc} | [Link](${url}) |\n"
                 done <<< "$ROWS_TSV"
 
                 printf "%b\n" "$DIRECTORY_HEADER$DIRECTORY_ROWS" > "$OUTPUT_FILE"
