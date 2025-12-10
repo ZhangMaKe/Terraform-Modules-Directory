@@ -4,10 +4,10 @@ This directory contains information about Terraform Module repositories provided
 
 | Module Name | Description | Link |
 | :--- | :--- | :--- |
-| **tf-module-lambda-function-with-iam-role-and-policies** | https://github.com/ZhangMaKe/tf-module-lambda-function-with-iam-role-and-policies | [Link]() |
-| **tf-module-lambda-function** | https://github.com/ZhangMaKe/tf-module-lambda-function | [Link]() |
+| **tf-module-lambda-function-with-iam-role-and-policies** | A Terraform module that will create a Python Lambda Function, an AWS IAM role, a set of IAM policies attached to the role, and attach the role to the Lambda Function. | [Link](https://github.com/ZhangMaKe/tf-module-lambda-function-with-iam-role-and-policies) |
+| **tf-module-lambda-function** | Creates a Python Lambda Function, with optional X-Ray tracing and SQS Dead Letter Queue for failed invocations. | [Link](https://github.com/ZhangMaKe/tf-module-lambda-function) |
 | **tf-module-api-endpoint-raise-event** | A terraform module that will create the resources needed for an API endpoint that triggers a specified EventBridge Event | [Link](https://github.com/ZhangMaKe/tf-module-api-endpoint-raise-event) |
-| **tf-module-iam-policy** | https://github.com/ZhangMaKe/tf-module-iam-policy | [Link]() |
+| **tf-module-iam-policy** | Provides simplified creation of AWS IAM Policies and Role attachment. | [Link](https://github.com/ZhangMaKe/tf-module-iam-policy) |
 | **tf-module-iam-role-and-policy** | A Terraform Module that creates an AWS IAM Role and Policies | [Link](https://github.com/ZhangMaKe/tf-module-iam-role-and-policy) |
-| **tf-module-lambda-api-endpoint** | https://github.com/ZhangMaKe/tf-module-lambda-api-endpoint | [Link]() |
+| **tf-module-lambda-api-endpoint** | Creates a Python Lambda Function, API Gateway HTTP (v2) Endpoint and necessary resources invocation of the Lambda Function using the Endpoint. | [Link](https://github.com/ZhangMaKe/tf-module-lambda-api-endpoint) |
 
